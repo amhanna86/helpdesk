@@ -20,6 +20,8 @@ class AuthenticationSuccessListener
         }
         $data['user'] = array(
             'id' => $user->getId(),
+            'email' => $user->getEmail(),
+            'userName' => $user->getFullUsername(),
             'roles' => $user->getRoles(),
             'type' => $user->getUserType()->getType(),
             'expirationDate' => time() + 3600
