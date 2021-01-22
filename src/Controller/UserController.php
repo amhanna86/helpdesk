@@ -77,6 +77,7 @@ class UserController extends AbstractFOSRestController
                 $user->getPassword()
             );
         $form->getData()->setPassword($hashedPassword);
+        $user->setType(UserTypeEntity::CUSTOMER);
         $this->getDoctrine()->getManager()->persist($user);
         $this->getDoctrine()->getManager()->flush();
 

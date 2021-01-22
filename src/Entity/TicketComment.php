@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\TicketCommentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=TicketCommentRepository::class)
@@ -31,6 +32,11 @@ class TicketComment
      */
     private $ticket;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="ticketComments")
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -56,6 +62,22 @@ class TicketComment
     public function setTicket(?Ticket $ticket): self
     {
         $this->ticket = $ticket;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param UserInterface|null $user
+     * @return $this
+     */
+    public function setUser(?UserInterface $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

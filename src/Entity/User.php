@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -68,6 +70,16 @@ class User implements UserInterface
      * @ORM\ManyToOne(targetEntity=UserType::class)
      */
     private $userType;
+
+//    /**
+//     * @ORM\OneToMany(targetEntity=TicketComment::class, mappedBy="user")
+//     */
+//    private $ticketComments;
+//
+//    public function __construct()
+//    {
+//        $this->ticketComments = new ArrayCollection();
+//    }
 
     /**
      * @return int|null
@@ -252,4 +264,35 @@ class User implements UserInterface
 
         return $this;
     }
+
+//    /**
+//     * @return Collection|TicketComment[]
+//     */
+//    public function getTicketComments(): Collection
+//    {
+//        return $this->ticketComments;
+//    }
+//
+//    public function addTicketComment(TicketComment $ticketComment): self
+//    {
+//        if (!$this->ticketComments->contains($ticketComment)) {
+//            $this->ticketComments[] = $ticketComment;
+//            $ticketComment->setUser($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeTicketComment(TicketComment $ticketComment): self
+//    {
+//        if ($this->ticketComments->contains($ticketComment)) {
+//            $this->ticketComments->removeElement($ticketComment);
+//            // set the owning side to null (unless already changed)
+//            if ($ticketComment->getUser() === $this) {
+//                $ticketComment->setUser(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
 }

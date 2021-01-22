@@ -18,13 +18,12 @@ class AuthenticationSuccessListener
         if (!$user instanceof UserInterface) {
             return;
         }
-
-        $data['data'] = array(
+        $data['user'] = array(
             'id' => $user->getId(),
             'roles' => $user->getRoles(),
             'type' => $user->getUserType()->getType(),
+            'expirationDate' => time() + 3600
         );
-
         $event->setData($data);
     }
 }

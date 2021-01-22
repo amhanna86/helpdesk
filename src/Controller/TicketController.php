@@ -138,6 +138,7 @@ class TicketController extends AbstractFOSRestController
          */
         $ticketComment = $form->getData();
         $ticketComment->setTicket($ticket);
+        $ticketComment->setUser($this->getUser());
         $this->getDoctrine()->getManager()->persist($ticketComment);
         $this->getDoctrine()->getManager()->flush();
 
