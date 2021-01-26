@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Ticket;
 use App\Entity\TicketComment;
 use App\Form\TicketCommentType;
+use App\Form\TicketEditType;
 use App\Form\TicketType;
 use OpenApi\Annotations as OA;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -113,6 +114,37 @@ class TicketController extends AbstractFOSRestController
     }
 
     /**
+     * @Rest\Put("/ticket/edit/{id}")
+     * @Rest\View()
+     * @OA\RequestBody(
+     *     @OA\JsonContent(
+     *     type="object",
+     *     @OA\Property(property="status", type="string"),
+     *     @OA\Property(property="agent", type="string")
+     * )
+     * )
+     * @param Request $request
+     * @param Ticket $ticket
+     * @return Response
+     */
+    public function putTicket(Request $request, Ticket $ticket): Response
+    {
+        $form = $this->createForm(TicketEditType::class, $ticket);
+        $form->submit($request->request->all());
+
+        if (false === $form->isValid()) {
+            return $this->handleView($this->view($form));
+        }
+        $this->getDoctrine()->getManager()->flush();
+        $data = [
+            'status' => $ticket->getStatus(),
+            'agent' => $ticket->getAgent()
+        ];
+        $view = $this->view($data, 200);
+        return $this->handleView($view);
+    }
+
+    /**
      * @Rest\Post("/ticket/comment/{id}/new")
      * @Rest\View()
      * @OA\RequestBody(
@@ -142,10 +174,7 @@ class TicketController extends AbstractFOSRestController
         $this->getDoctrine()->getManager()->persist($ticketComment);
         $this->getDoctrine()->getManager()->flush();
 
-        return $this->handleView($this->view([
-            'status' => 'ok'
-        ],
-            Response::HTTP_CREATED
-        ));
+        $view = $this->view($ticketComment, 200);
+        return $this->handleView($view);
     }
 }

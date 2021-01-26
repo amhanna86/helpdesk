@@ -73,7 +73,8 @@ class TicketVoter extends Voter
 
     private function canEdit(Ticket $ticket, User $user): bool
     {
-        return $user === $ticket->getCustomer();
+        return $user === $ticket->getCustomer() ||
+            $user === $ticket->getAgent();
     }
 
     private function canCreate(User $user): bool

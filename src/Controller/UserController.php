@@ -46,6 +46,22 @@ class UserController extends AbstractFOSRestController
     }
 
     /**
+     * @Rest\Get("/agents")
+     * @Rest\View()
+     */
+    public function getAgents(): Response
+    {
+        $agentType = $this->getDoctrine()->getRepository(UserTypeEntity::class)->findOneBy(
+            [
+                'type' => UserTypeEntity::AGENT
+            ]
+        );
+        $users = $this->getDoctrine()->getRepository(User::class)->findBy(['userType'=>$agentType]);
+        $view = $this->view($users, 200);
+        return $this->handleView($view);
+    }
+
+    /**
      * @Rest\Post("/register")
      * @OA\RequestBody(
      *     @OA\JsonContent(

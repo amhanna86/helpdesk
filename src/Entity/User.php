@@ -54,7 +54,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $LastName;
+    private $lastName;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -123,7 +123,7 @@ class User implements UserInterface
      */
     public function getFullUsername(): string
     {
-        return (string) $this->firstName . ' ' . $this->LastName ;
+        return (string) $this->firstName . ' ' . $this->lastName ;
     }
 
 
@@ -210,16 +210,16 @@ class User implements UserInterface
      */
     public function getLastName(): ?string
     {
-        return $this->LastName;
+        return $this->lastName;
     }
 
     /**
-     * @param string $LastName
+     * @param string $lastName
      * @return $this
      */
-    public function setLastName(string $LastName): self
+    public function setLastName(string $lastName): self
     {
-        $this->LastName = $LastName;
+        $this->lastName = $lastName;
 
         return $this;
     }

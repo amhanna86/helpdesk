@@ -32,7 +32,7 @@ class UserFixtures extends Fixture
             )
             ->setRoles(['ROLE_ADMIN'])
             ->setFirstName('admin')
-            ->setLastName('admin');
+            ->setlastName('admin');
 
         $userTypeCustomer = new UserType();
         $userTypeCustomer->setType(UserType::CUSTOMER);
