@@ -21,6 +21,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class User implements UserInterface
 {
 
+    public const FIRST_LEVEL_SUPPORT='1';
+    public const SECOND_LEVEL_SUPPORT='2';
+
     use TimestampableEntity;
 
     /**
@@ -70,6 +73,12 @@ class User implements UserInterface
      * @ORM\ManyToOne(targetEntity=UserType::class)
      */
     private $userType;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $supportLevel = self::FIRST_LEVEL_SUPPORT;
+
 
 //    /**
 //     * @ORM\OneToMany(targetEntity=TicketComment::class, mappedBy="user")
@@ -304,4 +313,16 @@ class User implements UserInterface
 //
 //        return $this;
 //    }
+
+public function getSupportLevel(): ?int
+{
+    return $this->supportLevel;
+}
+
+public function setSupportLevel(int $supportLevel): self
+{
+    $this->supportLevel = $supportLevel;
+
+    return $this;
+}
 }

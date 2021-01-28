@@ -1,4 +1,4 @@
-FROM php:7.3-apache
+FROM php:7.4-apache
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y vim zlib1g-dev libpng-dev libicu-dev g++ libxml2-dev libldb-dev libldap2-dev libzip-dev
 

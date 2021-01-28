@@ -35,6 +35,14 @@ class TicketRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getFirstLevelOpenTicketsCount(){
+        return $this->createQueryBuilder('t')
+            ->join('t.agent', 'agent')
+            ->select('agent.id as userId, count(t) as ticketCount')
+            ->where('t.status < 2')
+            ->groupBy('t.agent')
+            ->getQuery()->getResult();
+    }
 
     /*
     public function findOneBySomeField($value): ?Ticket

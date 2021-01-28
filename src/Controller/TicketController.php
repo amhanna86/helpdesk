@@ -7,6 +7,7 @@ use App\Entity\TicketComment;
 use App\Form\TicketCommentType;
 use App\Form\TicketEditType;
 use App\Form\TicketType;
+use App\Service\TicketService;
 use OpenApi\Annotations as OA;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -85,12 +86,13 @@ class TicketController extends AbstractFOSRestController
      *     @OA\Property(property="description", type="string")
      * )
      * )
-
      * @param Request $request
+     * @param TicketService $ticketService
      * @return Response
      */
-    public function postTicket(Request $request): Response
+    public function postTicket(Request $request, TicketService $ticketService): Response
     {
+
         $form = $this->createForm(TicketType::class);
         $form->submit($request->request->all());
 
@@ -103,6 +105,7 @@ class TicketController extends AbstractFOSRestController
         $ticket = $form->getData();
         $ticket->setStatus(Ticket::NEW);
         $ticket->setCustomer($this->getUser());
+        $ticket->setAgent($ticketService->getFirstLevelSupportUser());
         $this->getDoctrine()->getManager()->persist($ticket);
         $this->getDoctrine()->getManager()->flush();
 
