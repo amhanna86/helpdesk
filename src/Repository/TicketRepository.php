@@ -40,19 +40,8 @@ class TicketRepository extends ServiceEntityRepository
             ->join('t.agent', 'agent')
             ->select('agent.id as userId, count(t) as ticketCount')
             ->where('t.status < 2')
+            ->andWhere('agent.supportLevel = 1')
             ->groupBy('t.agent')
             ->getQuery()->getResult();
     }
-
-    /*
-    public function findOneBySomeField($value): ?Ticket
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

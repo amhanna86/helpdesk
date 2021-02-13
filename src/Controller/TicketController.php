@@ -92,13 +92,13 @@ class TicketController extends AbstractFOSRestController
      */
     public function postTicket(Request $request, TicketService $ticketService): Response
     {
-
         $form = $this->createForm(TicketType::class);
         $form->submit($request->request->all());
 
         if (false === $form->isValid()) {
             return $this->handleView($this->view($form));
         }
+
         /**
          * @var Ticket $ticket
          */
@@ -109,11 +109,8 @@ class TicketController extends AbstractFOSRestController
         $this->getDoctrine()->getManager()->persist($ticket);
         $this->getDoctrine()->getManager()->flush();
 
-        return $this->handleView($this->view([
-            'status' => 'ok'
-        ],
-            Response::HTTP_CREATED
-        ));
+        $view = $this->view($ticket->getId(), 200);
+        return $this->handleView($view);
     }
 
     /**
