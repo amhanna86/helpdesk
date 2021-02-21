@@ -35,6 +35,23 @@ class TicketRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @param UserInterface $user
+     * @return Ticket[] Returns an array of Ticket objects
+     */
+    public function findByUserAndStatus(UserInterface $user, $status): array
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.customer = :user')
+            ->andWhere('t.status = :status')
+            ->orWhere('t.agent = :user')
+            ->setParameter('user', $user)
+            ->setParameter('status', $status)
+            ->orderBy('t.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function getFirstLevelOpenTicketsCount(){
         return $this->createQueryBuilder('t')
             ->join('t.agent', 'agent')

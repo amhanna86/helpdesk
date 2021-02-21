@@ -177,4 +177,32 @@ class TicketController extends AbstractFOSRestController
         $view = $this->view($ticketComment, 200);
         return $this->handleView($view);
     }
+
+    /**
+     * @Rest\Put("/ticket/comment/edit/{id}")
+     * @Rest\View()
+     * @OA\RequestBody(
+     *     @OA\JsonContent(
+     *     type="object",
+     *     @OA\Property(property="comment", type="string")
+     * )
+     * )
+     * @param Request $request
+     * @param TicketComment $ticketComment
+     * @return Response
+     */
+    public function putComment(Request $request, TicketComment $ticketComment): Response
+    {
+        $form = $this->createForm(TicketCommentType::class, $ticketComment);
+        $form->submit($request->request->all());
+
+        if (false === $form->isValid()) {
+            return $this->handleView($this->view($form));
+        }
+
+        $this->getDoctrine()->getManager()->flush();
+
+        $view = $this->view($ticketComment, 200);
+        return $this->handleView($view);
+    }
 }
