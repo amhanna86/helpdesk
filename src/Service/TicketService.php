@@ -30,8 +30,13 @@ class TicketService
     {
         $usersTicketCount = $this->entityManager->getRepository(Ticket::class)->getFirstLevelOpenTicketsCount();
         $lowestUserTicketCount = array_column($usersTicketCount, 'ticketCount');
-        $minArray = $usersTicketCount[array_search(min($lowestUserTicketCount), $lowestUserTicketCount)];
-        return $this->entityManager->getRepository(User::class)->findOneBy(['id'=>$minArray['userId']]);
+
+        if (!empty($lowestUserTicketCount)){
+            $minArray = $usersTicketCount[array_search(min($lowestUserTicketCount), $lowestUserTicketCount)];
+            return $this->entityManager->getRepository(User::class)->findOneBy(['id'=>$minArray['userId']]);
+        }else{
+            return null;
+        }
     }
 
 }
