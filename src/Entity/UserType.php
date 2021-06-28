@@ -14,6 +14,7 @@ class UserType
 {
     public const CUSTOMER = 'customer';
     public const AGENT = 'agent';
+    public const ADMIN = 'admin';
 
     /**
      * @ORM\Id()

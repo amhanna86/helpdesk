@@ -25,11 +25,14 @@ class UserType extends AbstractType
             ]
         ]);
 
-        $builder->add('password', PasswordType::class, [
-            'constraints' => [
-                new NotBlank()
-            ]
-        ]);
+        if ($options['edit'] === false){
+            $builder->add('password', PasswordType::class, [
+                'constraints' => [
+                    new NotBlank()
+                ]
+            ]);
+        }
+
 
         $builder->add('firstName', TextType::class, [
             'constraints' => [
@@ -52,7 +55,8 @@ class UserType extends AbstractType
         $resolver->setDefaults([
             'data_class' => User::class,
             'allow_extra_fields' => true,
-            'csrf_protection' => false
+            'csrf_protection' => false,
+            'edit' => false
         ]);
     }
 }

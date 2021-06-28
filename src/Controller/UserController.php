@@ -56,7 +56,7 @@ class UserController extends AbstractFOSRestController
                 'type' => UserTypeEntity::AGENT
             ]
         );
-        $users = $this->getDoctrine()->getRepository(User::class)->findBy(['userType'=>$agentType]);
+        $users = $this->getDoctrine()->getRepository(User::class)->findBy(['userType' => $agentType]);
         $view = $this->view($users, 200);
         return $this->handleView($view);
     }
@@ -95,7 +95,7 @@ class UserController extends AbstractFOSRestController
         $form->getData()->setPassword($hashedPassword);
         $userType = $this->getDoctrine()->getRepository(UserTypeEntity::class)->findOneBy(
             [
-                'type'=>UserTypeEntity::CUSTOMER
+                'type' => UserTypeEntity::CUSTOMER
             ]
         );
         $user->setUserType($userType);
@@ -107,6 +107,43 @@ class UserController extends AbstractFOSRestController
         ],
             Response::HTTP_CREATED
         ));
+    }
+
+    /**
+     * @Rest\Put("/user/edit/{id}")
+     * @Rest\View()
+     * @OA\RequestBody(
+     *     @OA\JsonContent(
+     *     type="object",
+     *     @OA\Property(property="email", type="string"),
+     *     @OA\Property(property="firstName", type="string"),
+     *     @OA\Property(property="lastName", type="string"),
+     *     @OA\Property(property="company", type="string"),
+     *     @OA\Property(property="phone", type="string")
+     * )
+     * )
+     * @param Request $request
+     * @param User $user
+     * @return Response
+     */
+    public function putUser(Request $request, User $user): Response
+    {
+        $form = $this->createForm(UserType::class, $user, ['edit' => true]);
+        $form->submit($request->request->all());
+
+        if (false === $form->isValid()) {
+            return $this->handleView($this->view($form));
+        }
+        $this->getDoctrine()->getManager()->flush();
+        $data = [
+            'email' => $user->getEmail(),
+            'firstName' => $user->getFirstName(),
+            'lastName' => $user->getLastName(),
+            'company' => $user->getCompany(),
+            'phone' => $user->getPhone(),
+        ];
+        $view = $this->view($data, 200);
+        return $this->handleView($view);
     }
 
     /**
